@@ -19,11 +19,10 @@ const HomePage = () => {
           <a href="#" className="hover:text-white transition-colors">Pricing</a>
         </div>
         <button className="px-6 py-2 bg-white text-black rounded-full text-sm font-semibold hover:bg-gray-200 transition-all">
-          Masuk
+          Login
         </button>
       </nav>
 
-      {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-8 pt-20 pb-32 flex flex-col items-center text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -52,14 +51,13 @@ const HomePage = () => {
           A chat platform to support your productivity, coding, and creativity in one simple interface.
         </motion.p>
 
-        {/* Tombol Utama Menuju Chat */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <Link href="/chats">
-            <button className="group relative px-8 py-4 bg-blue-600 rounded-2xl font-bold text-lg overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_-10px_rgba(37,99,235,0.5)]">
+            <button className="group relative px-8 py-4 bg-blue-600 rounded-2xl font-bold text-lg cursor-pointer overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_-10px_rgba(37,99,235,0.5)]">
               <div className="relative z-10 flex items-center gap-3">
                 Start Chat Now
                 <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
@@ -69,7 +67,6 @@ const HomePage = () => {
           </Link>
         </motion.div>
 
-        {/* Bento Grid Mini (Fitur) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-32 w-full">
           {[
             { icon: <FaCode />, title: "Coding Assistant", desc: "Write and debug code in seconds." },
@@ -91,7 +88,6 @@ const HomePage = () => {
         </div>
       </main>
 
-      {/* Footer Ringkas */}
       <footer className="border-t border-gray-800 py-12 text-center text-gray-500 text-sm">
         © 2026 C-AI.
       </footer>
