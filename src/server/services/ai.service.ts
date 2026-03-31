@@ -1,28 +1,21 @@
 import { prisma } from "@/libs/prisma"
 
-export const buildOllamaMessage = async (sessionId: string) => {
+export const buildOllamaMessage = async (chatSessionId: string) => {
     const lastMessages = await prisma.message.findMany({
-        where: { sessionId },
+        where: { chatSessionId },
         orderBy: { createdAt: "asc" },
         take: 20
     });
 
     // ambil summary
     const session = await prisma.chatSession.findUnique({
-        where: { id: sessionId }
+        where: { id: chatSessionId }
     });
 
     const systemPrompt = {
         role: "system",
         content: "Kamu adalah AI assistant yang ramah, santai, dan membantu."
     };
-
-    const summaryPrompt = session?.summary
-        ? {
-            role: "system",
-            content: `Summary percakapan sebelumnya: ${session.summary}`
-        }
-        : null;
 
     const formattedMessages = lastMessages.map((msg) => ({
         role: msg.role === "ASSISTANT" ? "assistant" : "user",
@@ -31,7 +24,31 @@ export const buildOllamaMessage = async (sessionId: string) => {
 
     return [
         systemPrompt,
-        ...(summaryPrompt ? [summaryPrompt] : []),
         ...formattedMessages
     ];
+}
+
+export async function generateShortSummary(prompt: string) {
+    const res = await fetch("http://localhost:11434/api/generate", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            model: "deepseek-r1",
+            prompt: `
+Ringkas kalimat berikut menjadi maksimal 5 kata saja.
+Jangan pakai tanda kutip.
+Jangan lebih dari 5 kata.
+
+Kalimat:
+"${prompt}"
+      `,
+            stream: false
+        })
+    });
+
+    const data = await res.json();
+
+    return data.response.trim();
 }

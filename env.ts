@@ -14,6 +14,9 @@ const envSchema = z.object({
     DATABASE_NAME: z.string(),
     DATABASE_HOST: z.string(),
     DATABASE_PORT: z.coerce.number(),
+    JWT_SECRET: z.string().min(16).max(16),
+    JWT_EXPIRES_IN: z.coerce.number(),
+    SALT_ROUND: z.coerce.number(),
 })
 
 const processEnv = envSchema.parse(process.env)

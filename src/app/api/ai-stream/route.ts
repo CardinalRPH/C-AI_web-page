@@ -8,9 +8,9 @@ export async function POST(req: Request) {
 
     await prisma.message.create({
         data: {
-            sessionId,
+            chatSessionId: sessionId,
             role: "USER",
-            content: prompt
+            content: prompt,
         }
     });
 
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
                         if (json.done) {
                             await prisma.message.create({
                                 data: {
-                                    sessionId,
+                                    chatSessionId: sessionId,
                                     role: "ASSISTANT",
                                     content: fullResponse
                                 }
