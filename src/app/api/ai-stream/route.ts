@@ -3,8 +3,20 @@ import { buildOllamaMessage } from "@/server/services/ai.service";
 
 
 export async function POST(req: Request) {
-    const { prompt } = await req.json();
-    const sessionId = "xxSess1"
+    const { prompt, chatId } = await req.json();
+
+    const session = await prisma.chatSession.findFirst({
+        where: { sessionURI: chatId }
+    });
+
+    if (!session) {
+        return new Response(
+            JSON.stringify({ message: "Invalid chat sessionX" }),
+            { status: 400 }
+        );
+    }
+
+    const sessionId = session.id
 
     await prisma.message.create({
         data: {
@@ -15,6 +27,12 @@ export async function POST(req: Request) {
     });
 
     const messages = await buildOllamaMessage(sessionId);
+    if (!messages) {
+        return new Response(
+            JSON.stringify({ message: "Invalid chat sessionY" }),
+            { status: 400 }
+        );
+    }
 
     const ollamaRes = await fetch("http://localhost:11434/api/chat", {
         method: "POST",
@@ -77,7 +95,9 @@ export async function POST(req: Request) {
                             return;
                         }
 
-                    } catch { }
+                    } catch (error) {
+                        console.log(error)
+                    }
                 }
             }
 

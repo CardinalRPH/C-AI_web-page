@@ -7,7 +7,7 @@ export type chatHistoryType = {
 }
 
 export type messageType = {
-    id: number
+    id: string
     role: MessageRole
     content: string,
     isNew: boolean

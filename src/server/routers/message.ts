@@ -1,9 +1,15 @@
-import { firstMsgSchema } from "../schemas/message.schema";
-import { messageService } from "../services/message.service";
+import { firstMsgSchema, getMsgHistorySchema } from "../schemas/message.schema";
+import { chatService } from "../services/chat.service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-export const authRouter = createTRPCRouter({
+export const messageRouter = createTRPCRouter({
     firstMsg: protectedProcedure.input(firstMsgSchema).mutation(async ({ input, ctx }) => {
-        return await messageService.sendFirstMsg(input.prompt, ctx.user.userId)
+        return await chatService.sendFirstMsg(input.prompt, ctx.user)
+    }),
+    getChatHistory: protectedProcedure.query(async ({ ctx }) => {
+        return await chatService.getChatHistory(ctx.user)
+    }),
+    getMsgHistory: protectedProcedure.input(getMsgHistorySchema).query(async ({ input }) => {
+        return await chatService.getMsgHistory(input.chatId)
     })
 })

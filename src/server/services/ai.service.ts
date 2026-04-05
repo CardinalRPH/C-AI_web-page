@@ -1,16 +1,17 @@
 import { prisma } from "@/libs/prisma"
 
 export const buildOllamaMessage = async (chatSessionId: string) => {
+
+
     const lastMessages = await prisma.message.findMany({
         where: { chatSessionId },
         orderBy: { createdAt: "asc" },
         take: 20
     });
 
+    console.log(lastMessages)
+
     // ambil summary
-    const session = await prisma.chatSession.findUnique({
-        where: { id: chatSessionId }
-    });
 
     const systemPrompt = {
         role: "system",

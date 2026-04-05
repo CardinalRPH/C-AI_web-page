@@ -18,10 +18,10 @@ model ChatSession {
 }
 
 model Message {
-  id            String       @id @default(uuid())
+  id            String      @id @default(uuid())
   role          MessageRole
-  content       String
-  createdAt     DateTime     @default(now())
+  content       String      @db.Text
+  createdAt     DateTime    @default(now())
   chatSessionId String
 
   @@index([chatSessionId], map: "Message_chatSessionId_fkey")
